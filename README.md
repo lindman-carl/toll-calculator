@@ -1,6 +1,15 @@
+# Toll Calculator
+
+Calculate toll fee revenue.
+A vehicle passing a toll have to pay a fee for passing. The fee will depend upon the time of the passing.
+A vehicle only have to pay for one passing during a 60 minute period, the fee will be the largest one of the passings during this period.
+The total fees a vehicle can aquire for one day is capped at 60 sek. 
+Some type of vehicles are exempt from paying toll fees.
+Weekends and some holidays are toll free.
+
 ## Toll Config
 
-Toll can be configed by changing the values in tollConfig.json.
+Toll can be configured by changing the values in tollConfig.json.
 
 ### TOLL_FEE_INTERVAL_START_BY_MINUTE
 
