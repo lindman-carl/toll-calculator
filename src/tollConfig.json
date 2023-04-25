@@ -39,5 +39,7 @@
     "12/26",
     "12/31"
   ],
-  "TOLL_FREE_WEEKDAYS": [0, 6]
+  "TOLL_FREE_WEEKDAYS": [0, 6],
+  "TOLL_PERIOD_LENGTH": 60,
+  "DAILY_TOLL_FEE_LIMIT": 60
 }

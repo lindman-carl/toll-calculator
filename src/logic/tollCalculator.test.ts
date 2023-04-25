@@ -2,6 +2,7 @@ import {
   isTollFreeDate,
   isTollFreeVehicleType,
   getTollFeeByDate,
+  calculateVehicleTollFee,
 } from "./tollCalculator";
 import {
   TOLL_FREE_VEHICLE_TYPES,
@@ -152,5 +153,180 @@ describe("isTollFreeVehicleType", () => {
       tollPassDates: [],
     } as Vehicle);
     expect(isTollFree).toBe(false);
+  });
+});
+
+describe("calculateVehicleTollFee", () => {
+  test("should return 0 for a toll free vehicle", () => {
+    const vehicle: Vehicle = {
+      type: "motorbike",
+      tollPassDates: [new Date()],
+    };
+
+    expect(calculateVehicleTollFee(vehicle)).toBe(0);
+  });
+
+  test("should return 0 if the vehicle has not passed any tolls", () => {
+    const vehicle: Vehicle = {
+      type: "car",
+      tollPassDates: [],
+    };
+
+    const tollFreeVehicle: Vehicle = {
+      type: "emergency",
+      tollPassDates: [],
+    };
+
+    expect(calculateVehicleTollFee(vehicle)).toBe(0);
+    expect(calculateVehicleTollFee(tollFreeVehicle)).toBe(0);
+  });
+
+  test("should return the correct toll fee for a vehicle that has passed tolls that doesn't have overlaping periods", () => {
+    const vehicles: Vehicle[] = [
+      {
+        type: "car",
+        tollPassDates: [
+          new Date("2021-01-01T06:20"), // 8
+          new Date("2021-01-01T08:35"), // 8
+          new Date("2021-01-01T09:40"), // 8
+          new Date("2021-01-01T11:30"), // 8
+          new Date("2021-01-01T15:10"), // 13
+        ], // 45
+      },
+      {
+        type: "locomotive",
+        tollPassDates: [
+          new Date("2021-01-01T07:20"), // 18
+          new Date("2021-01-01T08:35"), // 8
+          new Date("2021-01-01T10:05"), // 8
+        ], // 34
+      },
+    ];
+    const expectedFees = [45, 34];
+
+    for (let i = 0; i < vehicles.length; i++) {
+      expect(calculateVehicleTollFee(vehicles[i])).toBe(expectedFees[i]);
+    }
+  });
+
+  test("should return the correct toll fee for a vehicle that has passed tolls that have overlaping periods", () => {
+    const vehicles: Vehicle[] = [
+      {
+        type: "car",
+        tollPassDates: [
+          new Date("2021-01-01T06:10"), // 0
+          new Date("2021-01-01T06:45"), // 0
+          new Date("2021-01-01T07:05"), // 18
+        ], // 18
+      },
+      {
+        type: "locomotive",
+        tollPassDates: [
+          new Date("2021-01-01T06:10"), // 0
+          new Date("2021-01-01T06:45"), // 0
+          new Date("2021-01-01T07:05"), // 18
+          new Date("2021-01-01T07:15"), // 18
+          new Date("2021-01-01T07:35"), // 0
+          new Date("2021-01-01T07:45"), // 0
+          new Date("2021-01-01T08:10"), // 0
+        ], // 36
+      },
+      {
+        type: "camel",
+        tollPassDates: [
+          new Date("2021-01-01T06:10"), // 0
+          new Date("2021-01-01T06:45"), // 0
+          new Date("2021-01-01T07:05"), // 18
+          new Date("2021-01-01T07:35"), // 18
+          new Date("2021-01-01T07:45"), // 0
+          new Date("2021-01-01T08:10"), // 0
+          new Date("2021-01-01T09:30"), // 8
+          new Date("2021-01-01T09:45"), // 0
+        ], // 44
+      },
+    ];
+    const expectedFees = [18, 36, 44];
+
+    for (let i = 0; i < vehicles.length; i++) {
+      expect(calculateVehicleTollFee(vehicles[i])).toBe(expectedFees[i]);
+    }
+  });
+
+  test("should return a maximum 60 for a day", () => {
+    const vehicle: Vehicle = {
+      type: "car",
+      tollPassDates: [
+        new Date("2021-01-01T06:10"), // 0
+        new Date("2021-01-01T06:45"), // 0
+        new Date("2021-01-01T07:05"), // 18
+        new Date("2021-01-01T07:35"), // 18
+        new Date("2021-01-01T07:45"), // 0
+        new Date("2021-01-01T08:10"), // 0
+        new Date("2021-01-01T09:30"), // 8
+        new Date("2021-01-01T09:45"), // 0
+        new Date("2021-01-01T10:30"), // 8
+        new Date("2021-01-01T10:45"), // 0
+        new Date("2021-01-01T11:30"), // 8
+        new Date("2021-01-01T11:45"), // 0
+        new Date("2021-01-01T12:30"), // 8
+        new Date("2021-01-01T12:45"), // 0
+        new Date("2021-01-01T13:30"), // 8
+        new Date("2021-01-01T13:45"), // 0
+        new Date("2021-01-01T14:30"), // 8
+        new Date("2021-01-01T14:45"), // 0
+        new Date("2021-01-01T15:30"), // 13
+        new Date("2021-01-01T15:45"), // 0
+        new Date("2021-01-01T16:30"), // 13
+      ],
+    };
+
+    expect(calculateVehicleTollFee(vehicle)).toBe(60);
+  });
+
+  test("should return the correct toll fee for a vehicle that has passed tolls on multiple days", () => {
+    const vehicle: Vehicle = {
+      type: "car",
+      tollPassDates: [
+        new Date("2021-01-01T06:10"), // 0
+        new Date("2021-01-01T06:45"), // 0
+        new Date("2021-01-01T07:05"), // 18
+        new Date("2021-01-01T07:35"), // 18
+        new Date("2021-01-01T07:45"), // 0
+        new Date("2021-01-01T08:10"), // 0
+        new Date("2021-01-01T09:30"), // 8
+        new Date("2021-01-01T09:45"), // 0
+        new Date("2021-01-01T10:30"), // 8
+        new Date("2021-01-01T10:45"), // 0
+        new Date("2021-01-01T11:30"), // 8
+        new Date("2021-01-01T11:45"), // 0
+        new Date("2021-01-01T12:30"), // 8
+        new Date("2021-01-01T12:45"), // 0
+        new Date("2021-01-01T13:30"), // 8
+        new Date("2021-01-01T13:45"), // 0
+        new Date("2021-01-01T14:30"), // 8
+        new Date("2021-01-01T14:45"), // 0
+        new Date("2021-01-01T15:30"), // 13
+        new Date("2021-01-01T15:45"), // 0
+        new Date("2021-01-01T16:30"), // 13
+        new Date("2021-01-02T06:05"), // 8
+        new Date("2021-01-02T09:10"), // 8
+        new Date("2021-01-02T11:00"), // 8
+        new Date("2021-01-03T07:10"), // 18
+        new Date("2021-01-03T08:00"), // 0
+        new Date("2021-01-04T07:15"), // 18
+        new Date("2021-01-04T09:00"), // 8
+        new Date("2021-01-04T14:00"), // 8
+        new Date("2021-01-04T15:20"), // 13
+        new Date("2021-01-04T16:25"), // 18
+      ],
+    };
+
+    // 1/1: 60
+    // 2/1: 24
+    // 3/1: 18
+    // 4/1: 60
+    // sum: 162
+
+    expect(calculateVehicleTollFee(vehicle)).toBe(162);
   });
 });
