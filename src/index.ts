@@ -1,6 +1,6 @@
-import { readFileSync } from "fs";
-
 import { calculateVehicleTollFee } from "./logic/tollCalculator";
+
+import { readFileSync } from "fs";
 import { Vehicle } from "./types";
 
 const main = () => {
@@ -66,3 +66,16 @@ const main = () => {
 };
 
 main();
+
+// const fee = calculateVehicleTollFee({
+//   id: "test",
+//   type: "car",
+//   tollPassDates: [
+//     new Date("2021-01-01T06:10"), // 0
+//     new Date("2021-01-01T06:45"), // 0
+//     new Date("2021-01-01T07:05"), // 18
+//     new Date("2021-01-01T09:15"), // 8
+//   ],
+// });
+
+// console.log(fee);
