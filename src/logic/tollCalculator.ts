@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { Vehicle } from "@/types";
 import { TOLL_FREE_VEHICLE_TYPES } from "../tollConfig.json";
 
@@ -6,16 +8,26 @@ const TOLL_FREE_VEHICLE_TYPES_MAP = new Map(
   TOLL_FREE_VEHICLE_TYPES.map((el: string) => [el, true])
 );
 
-export const isTollFreeVehicleType = (vehicle: Vehicle) => {
+export const isTollFreeVehicleType = (vehicle: Vehicle): boolean => {
+  // returns true if vehicle type is toll free
+  // TOLL_FREE_VEHICLE_TYPES are defined in tollConfig.json
   // O(1) time complexity
 
-  if (!vehicle) {
-    throw new Error("No vehicle");
+  // input validation
+  const vehicleSchema = z.object({
+    type: z.string().nonempty(),
+  });
+  try {
+    vehicleSchema.parse(vehicle);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error(error);
+    }
+
+    // invalid input is not toll free
+    return false;
   }
 
-  if (!vehicle.type) {
-    throw new Error("No vehicle type");
-  }
-
+  // check map for vehicle type
   return TOLL_FREE_VEHICLE_TYPES_MAP.has(vehicle.type);
 };

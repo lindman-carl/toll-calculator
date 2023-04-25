@@ -12,7 +12,7 @@ describe("isTollFreeVehicleType", () => {
       expect(isTollFree).toBe(true);
     }
   });
-  test("should return false for all other vehicles", () => {
+  test("should return false for all vehicle types not found in TOLL_FREE_VEHICLE_TYPES", () => {
     const nonTollFreeVehicleTypes = [
       "car",
       "bus",
@@ -28,5 +28,12 @@ describe("isTollFreeVehicleType", () => {
       } as Vehicle);
       expect(isTollFree).toBe(false);
     }
+  });
+  test("should return false for vehicles with an empty type", () => {
+    const isTollFree = isTollFreeVehicleType({
+      type: "",
+      tollPassDates: [],
+    } as Vehicle);
+    expect(isTollFree).toBe(false);
   });
 });
