@@ -7,6 +7,9 @@ import {
 import { Vehicle } from "@/types";
 import { getDateString } from "../utils";
 
+// hide console.error
+jest.spyOn(console, "error").mockImplementation(() => {});
+
 describe("isTollFreedate", () => {
   const tollFreeDatesMap = new Map<string, boolean>();
   for (const date of TOLL_FREE_DATES) {
