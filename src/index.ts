@@ -25,15 +25,28 @@ const main = () => {
 
   console.log("Toll revenue report\n");
 
-  console.log("id".padEnd(24, " ") + "type".padEnd(24, " ") + "total fee");
+  console.log(
+    "id".padEnd(24, " ") +
+      "type".padEnd(24, " ") +
+      "total fee".padEnd(12, " ") +
+      "passes".padEnd(12, " ") +
+      "fee/pass".padEnd(12, " ")
+  );
   // calculate toll fee for each vehicle, store in map and print
   vehicles.forEach((vehicle) => {
     const tollFee = calculateVehicleTollFee(vehicle);
     tollFeeByVehicleId.set(vehicle.id, tollFee);
     totalFee += tollFee;
 
+    const tollPasses = vehicle.tollPassDates.length.toString();
+    const averagePassFee = (tollFee / vehicle.tollPassDates.length).toFixed(2);
+
     console.log(
-      vehicle.id.padEnd(24, " ") + vehicle.type.padEnd(24, " ") + tollFee
+      vehicle.id.padEnd(24, " ") +
+        vehicle.type.padEnd(24, " ") +
+        tollFee.toString().padEnd(12, " ") +
+        tollPasses.padEnd(12, " ") +
+        averagePassFee
     );
   });
 
