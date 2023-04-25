@@ -4,10 +4,10 @@ import { calculateVehicleTollFee } from "./logic/tollCalculator";
 import { Vehicle } from "./types";
 
 const main = () => {
-  let fileName = process.argv[2] || "example_data.json";
+  let filePath = process.argv[2] || __dirname + "/" + "toll_data.json";
 
   // read file
-  const file = readFileSync(__dirname + "/" + fileName, "utf8");
+  const file = readFileSync(filePath, "utf8");
 
   // parse json file
   const jsonFromFile = JSON.parse(file);
