@@ -1,0 +1,10 @@
+{
+  "TOLL_FREE_VEHICLE_TYPES": [
+    "diplomat",
+    "emergency",
+    "foreign",
+    "military",
+    "motorbike",
+    "tractor"
+  ]
+}
