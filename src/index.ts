@@ -13,7 +13,7 @@ const main = () => {
   const jsonFromFile = JSON.parse(file);
 
   // parse vehicles from json
-  const vehicles: Vehicle[] = jsonFromFile.vehicles.map((vehicle: Vehicle) => {
+  const vehicles: Vehicle[] = jsonFromFile.map((vehicle: Vehicle) => {
     return {
       ...vehicle,
       tollPassDates: vehicle.tollPassDates.map((date) => new Date(date)),
@@ -37,10 +37,18 @@ const main = () => {
     );
   });
 
+  const totalPasses = vehicles.reduce((acc, vehicle) => {
+    return acc + vehicle.tollPassDates.length;
+  }, 0);
+  const averageFeePerVehicle = totalFee / vehicles.length;
+  const averageFeePerPass = (totalFee / totalPasses).toFixed(2);
+
   console.group("\nStatistics");
   console.log("total vehicles".padEnd(16, " ") + vehicles.length);
   console.log("total fees".padEnd(16, " ") + totalFee);
-  console.log("average fee".padEnd(16, " ") + totalFee / vehicles.length);
+  console.log("total passes".padEnd(16, " ") + totalPasses);
+  console.log("fee/vehicle".padEnd(16, " ") + averageFeePerVehicle);
+  console.log("fee/pass".padEnd(16, " ") + averageFeePerPass);
   console.groupEnd();
 };
 
