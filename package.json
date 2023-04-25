@@ -19,7 +19,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "nanoid": "^4.0.2",
+    "nanoid": "^3.3.6",
     "zod": "^3.21.4"
   },
   "repository": {
