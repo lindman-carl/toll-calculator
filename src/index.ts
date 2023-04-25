@@ -1,19 +1,24 @@
 import { readFileSync } from "fs";
 
 import { calculateVehicleTollFee } from "./logic/tollCalculator";
-import { parseVehicle } from "./utils";
+import { Vehicle } from "./types";
 
 const main = () => {
-  const fileName = process.argv[2];
+  let fileName = process.argv[2] || "example_data.json";
 
   // read file
   const file = readFileSync(__dirname + "/" + fileName, "utf8");
 
-  // split file into lines
-  const lines = file.split("\n");
+  // parse json file
+  const jsonFromFile = JSON.parse(file);
 
-  // parse lines
-  const vehicles = lines.map((line) => parseVehicle(line));
+  // parse vehicles from json
+  const vehicles: Vehicle[] = jsonFromFile.vehicles.map((vehicle: Vehicle) => {
+    return {
+      ...vehicle,
+      tollPassDates: vehicle.tollPassDates.map((date) => new Date(date)),
+    };
+  });
 
   const tollFeeByVehicleId = new Map<string, number>();
   let totalFee = 0;
