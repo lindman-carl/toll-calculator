@@ -10,7 +10,7 @@ import { getDateString } from "../utils";
 // hide console.error
 jest.spyOn(console, "error").mockImplementation(() => {});
 
-describe("isTollFreedate", () => {
+describe("isTollFreeDate", () => {
   const tollFreeDatesMap = new Map<string, boolean>();
   for (const date of TOLL_FREE_DATES) {
     tollFreeDatesMap.set(date, true);
