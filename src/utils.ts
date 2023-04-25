@@ -3,3 +3,6 @@ export const getDateString = (date: Date) => {
   // 1-indexed
   return `${date.getMonth() + 1}/${date.getDate()}`;
 };
+
+export const getMinutesSinceMidnight = (date: Date) =>
+  date.getHours() * 60 + date.getMinutes();
