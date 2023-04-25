@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+
 import {
   isTollFreeDate,
   isTollFreeVehicleType,
@@ -124,6 +126,7 @@ describe("isTollFreeVehicleType", () => {
   test("should return true for all vehicles with a type found in TOLL_FREE_VEHICLE_TYPES", () => {
     for (const type of TOLL_FREE_VEHICLE_TYPES) {
       const isTollFree = isTollFreeVehicleType({
+        id: nanoid(8),
         type,
         tollPassDates: [],
       } as Vehicle);
@@ -141,6 +144,7 @@ describe("isTollFreeVehicleType", () => {
 
     for (const type of nonTollFreeVehicleTypes) {
       const isTollFree = isTollFreeVehicleType({
+        id: nanoid(8),
         type,
         tollPassDates: [],
       } as Vehicle);
@@ -149,6 +153,7 @@ describe("isTollFreeVehicleType", () => {
   });
   test("should return false for vehicles with an empty type", () => {
     const isTollFree = isTollFreeVehicleType({
+      id: nanoid(8),
       type: "",
       tollPassDates: [],
     } as Vehicle);
@@ -159,6 +164,7 @@ describe("isTollFreeVehicleType", () => {
 describe("calculateVehicleTollFee", () => {
   test("should return 0 for a toll free vehicle", () => {
     const vehicle: Vehicle = {
+      id: nanoid(8),
       type: "motorbike",
       tollPassDates: [new Date()],
     };
@@ -168,11 +174,13 @@ describe("calculateVehicleTollFee", () => {
 
   test("should return 0 if the vehicle has not passed any tolls", () => {
     const vehicle: Vehicle = {
+      id: nanoid(8),
       type: "car",
       tollPassDates: [],
     };
 
     const tollFreeVehicle: Vehicle = {
+      id: nanoid(8),
       type: "emergency",
       tollPassDates: [],
     };
@@ -184,6 +192,7 @@ describe("calculateVehicleTollFee", () => {
   test("should return the correct toll fee for a vehicle that has passed tolls that doesn't have overlaping periods", () => {
     const vehicles: Vehicle[] = [
       {
+        id: nanoid(8),
         type: "car",
         tollPassDates: [
           new Date("2021-01-01T06:20"), // 8
@@ -194,6 +203,7 @@ describe("calculateVehicleTollFee", () => {
         ], // 45
       },
       {
+        id: nanoid(8),
         type: "locomotive",
         tollPassDates: [
           new Date("2021-01-01T07:20"), // 18
@@ -212,6 +222,7 @@ describe("calculateVehicleTollFee", () => {
   test("should return the correct toll fee for a vehicle that has passed tolls that have overlaping periods", () => {
     const vehicles: Vehicle[] = [
       {
+        id: nanoid(8),
         type: "car",
         tollPassDates: [
           new Date("2021-01-01T06:10"), // 0
@@ -220,6 +231,7 @@ describe("calculateVehicleTollFee", () => {
         ], // 18
       },
       {
+        id: nanoid(8),
         type: "locomotive",
         tollPassDates: [
           new Date("2021-01-01T06:10"), // 0
@@ -232,6 +244,7 @@ describe("calculateVehicleTollFee", () => {
         ], // 36
       },
       {
+        id: nanoid(8),
         type: "camel",
         tollPassDates: [
           new Date("2021-01-01T06:10"), // 0
@@ -254,6 +267,7 @@ describe("calculateVehicleTollFee", () => {
 
   test("should return a maximum 60 for a day", () => {
     const vehicle: Vehicle = {
+      id: nanoid(8),
       type: "car",
       tollPassDates: [
         new Date("2021-01-01T06:10"), // 0
@@ -285,6 +299,7 @@ describe("calculateVehicleTollFee", () => {
 
   test("should return the correct toll fee for a vehicle that has passed tolls on multiple days", () => {
     const vehicle: Vehicle = {
+      id: nanoid(8),
       type: "car",
       tollPassDates: [
         new Date("2021-01-01T06:10"), // 0

@@ -1,5 +1,5 @@
 export type Vehicle = {
-  // id: string;
+  id: string;
   type:
     | "motorbike"
     | "tractor"
