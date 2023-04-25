@@ -2,6 +2,13 @@
 
 Toll can be configed by changing the values in tollConfig.json.
 
+### TOLL_FEE_INTERVAL_START_BY_MINUTE
+
+[number, number][]
+[toll fee interval start minute, toll fee][]
+
+Time period for which a certain toll fee begins. Minutes since 00:00.
+
 ### TOLL_FREE_VEHICLE_TYPES
 
 string[]

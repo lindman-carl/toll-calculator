@@ -1,4 +1,17 @@
 {
+  "TOLL_FEE_INTERVAL_START_BY_MINUTE": [
+    [0, 0],
+    [360, 8],
+    [390, 13],
+    [420, 18],
+    [480, 13],
+    [510, 8],
+    [900, 13],
+    [930, 18],
+    [1020, 13],
+    [1080, 8],
+    [1110, 0]
+  ],
   "TOLL_FREE_VEHICLE_TYPES": [
     "diplomat",
     "emergency",
