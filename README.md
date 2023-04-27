@@ -12,6 +12,7 @@ Weekends and some holidays are toll free.
 
 ```
 git clone https://github.com/lindman-carl/toll-calculator
+cd toll-calculator
 npm install
 npm run start [absolute path to toll_data]
 ```
