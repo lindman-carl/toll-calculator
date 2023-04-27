@@ -9,6 +9,10 @@ const main = () => {
   // read file
   const file = readFileSync(filePath, "utf8");
 
+  if (!file) {
+    console.error("Could not read file:", filePath);
+  }
+
   // parse json file
   const jsonFromFile = JSON.parse(file);
 
@@ -41,6 +45,7 @@ const main = () => {
     const tollPasses = vehicle.tollPassDates.length.toString();
     const averagePassFee = (tollFee / vehicle.tollPassDates.length).toFixed(2);
 
+    // print vehicle row
     console.log(
       vehicle.id.padEnd(24, " ") +
         vehicle.type.padEnd(24, " ") +
@@ -50,6 +55,7 @@ const main = () => {
     );
   });
 
+  // print statistics
   const totalPasses = vehicles.reduce((acc, vehicle) => {
     return acc + vehicle.tollPassDates.length;
   }, 0);
